@@ -11,7 +11,7 @@ const peers = {}
 navigator.mediaDevices.getUserMedia({
     video: true,
     audio: true
-}).then(stream => {
+}).then(stream => { // Promise
     addVideoStream(myVideo, stream)
 
     myPeer.on('call', call => {
@@ -50,7 +50,7 @@ function connectToNewUser(userId, stream) {
 
 function addVideoStream(video, stream) {
     video.srcObject = stream
-    video.addEventListener('loadmetadata', () => {
+    video.addEventListener('loadedmetadata', () => {
         video.play() // Play the video
     })
     videoGrid.append(video)
