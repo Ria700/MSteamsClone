@@ -26,12 +26,12 @@ io.on('connection', socket => {
     })
 })
 
-var ExpressPeerServer = require("peer").ExpressPeerServer;    
-var options = {
-  debug: true,
-  allow_discovery: true,
-};
-let peerServer = ExpressPeerServer(server, options);
-app.use("/peerjs", peerServer);
+// var ExpressPeerServer = require("peer").ExpressPeerServer;    
+// var options = {
+//   debug: true,
+//   allow_discovery: true,
+// };
+// let peerServer = ExpressPeerServer(server, options);
+// app.use("/peerjs", peerServer);
 
 server.listen(process.env.PORT||3000)
