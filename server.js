@@ -34,4 +34,6 @@ io.on('connection', socket => {
 // let peerServer = ExpressPeerServer(server, options);
 // app.use("/peerjs", peerServer);
 
-server.listen(process.env.PORT||3000)
+const PORT = process.env.PORT || 3000;
+
+server.listen(PORT, () => console.log(`Server Started on ${PORT}`));

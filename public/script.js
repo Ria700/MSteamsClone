@@ -37,7 +37,7 @@ socket.on('user-disconnected', userId => {
     if (peers[userId]) peers[userId].close()
 })
 
-myPeer.on('open', id => {
+myPeer.on('open', (id) => {
     socket.emit('join-room', ROOM_ID, id)
 }) 
 
@@ -59,5 +59,5 @@ function addVideoStream(video, stream) {
     video.addEventListener('loadedmetadata', () => {
         video.play() // Play the video
     })
-    videoGrid.appendChild(video)
+    videoGrid.append(video)
 }
