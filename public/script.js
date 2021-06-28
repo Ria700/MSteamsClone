@@ -2,7 +2,7 @@ const socket = io('/')
 const videoGrid = document.getElementById('video-grid')
 const myPeer = new Peer(undefined, {
     secure:true,
-    host: '/',
+    host: 'https://blooming-lowlands-02462.herokuapp.com/',
     port: '443',
     path: "/peerjs"
 })
