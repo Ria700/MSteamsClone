@@ -17,19 +17,14 @@ navigator.mediaDevices.getUserMedia({
     myPeer.on('call', call => {
         call.answer(stream)
         const video = document.createElement('video')
-        call.on('stream', userVideoStream => { // To share stream on all user screens
-            setTimeout(() => {
-                addVideoStream(video, userVideoStream)
-            }, 1000)
+        call.on("stream", (userVideoStream) => {
+            addVideoStream(video, userVideoStream)
         })
     })
 
     socket.on('user-connected', userId => { // event to connect to new user
-        // user is joining
-        setTimeout(() => {
-          // user joined
-          connectToNewUser(userId, stream)
-        }, 1000)
+        console.log("New User Connected")
+        connectToNewUser(userId, stream)
       })
 })
 
