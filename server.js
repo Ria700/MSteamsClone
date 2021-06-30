@@ -2,7 +2,13 @@ const express = require('express')
 const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
+const { ExpressPeerServer } = require('peer');
+const peerServer = ExpressPeerServer(server, {
+    debug: true
+})
 const { v4: uuidV4 } = require('uuid')
+
+app.use('/peerjs', peerServer)
 
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
@@ -17,8 +23,8 @@ app.get('/:room', (req, res) => {
 
 // var ExpressPeerServer = require("peer").ExpressPeerServer;    
 var options = {
-  debug: true,
-  allow_discovery: true,
+    debug: true,
+    allow_discovery: true,
 };
 // let peerServer = ExpressPeerServer(server, options);
 // app.use("/peerjs", peerServer);
@@ -28,6 +34,13 @@ io.on('connection', socket => {
         socket.join(roomId)
         socket.broadcast.to(roomId).emit('user-connected', userId)
 
+        // messages
+        socket.on('message', (message) => {
+            //send message to the same room
+            io.to(roomId).emit('createMessage', message)
+        })
+
+        // user disconnected
         socket.on('disconnect', () => {
             socket.broadcast.to(roomId).emit('user-disconnected', userId)
         })
