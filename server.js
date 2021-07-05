@@ -1,6 +1,14 @@
 const express = require('express')
 const app = express()
+var ExpressPeerServer = require("peer").ExpressPeerServer;    
+var options = {
+    debug: true,
+    // allow_discovery: true,
+}
 const server = require('http').Server(app)
+
+app.use('/peerjs', ExpressPeerServer(server, options));
+
 const io = require('socket.io')(server)
 // const { ExpressPeerServer } = require('peer');
 // const peerServer = ExpressPeerServer(server, {
@@ -8,7 +16,7 @@ const io = require('socket.io')(server)
 // })
 const { v4: uuidV4 } = require('uuid')
 
-// app.use('/peerjs', peerServer)
+app.use('/peerjs', peerServer)
 
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
@@ -21,11 +29,7 @@ app.get('/:room', (req, res) => {
     res.render('room', { roomId: req.params.room })
 })
 
-// var ExpressPeerServer = require("peer").ExpressPeerServer;    
-// var options = {
-//     debug: true,
-//     allow_discovery: true,
-// }
+
 // let peerServer = ExpressPeerServer(server, options);
 // app.use("/peerjs", peerServer);
 
