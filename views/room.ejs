@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>MS Teams Clone</title>
+    <link rel="shortcut icon" type="images/svg" href="/img/logo.svg" />
     <script>
         const ROOM_ID = "<%= roomId %>"
     </script>
@@ -48,7 +49,7 @@
                     <div class="main__controls__button">
                         <img src="/img/Chat.svg">
                     </div>
-                    <div class="main__controls__button">
+                    <div class="main__controls__button" id="invite-button">
                         <img src="/img/Invite.svg">
                     </div>
                 </div>
@@ -64,7 +65,7 @@
                     </div>
                 </div>
                 <div class="main__controls__block">
-                    <div class="main__controls__button">
+                    <div class="main__controls__button" id="end-button">
                         <span class="leave_meeting"><img src="/img/Leave.svg" width="30px">Leave</span>
                     </div>
                 </div>

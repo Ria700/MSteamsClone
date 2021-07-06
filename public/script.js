@@ -77,13 +77,10 @@ function addVideoStream(video, stream) {
     videoGrid.append(video)
 }
 
-
-
 const scrollToBottom = () => {
     var d = $('.main__chat_window');
     d.scrollTop(d.prop("scrollHeight"));
 }
-
 
 const muteUnmute = () => {
     const enabled = myVidStream.getAudioTracks()[0].enabled;
@@ -134,4 +131,28 @@ const setPlayVideo = () => {
   <i class="stop fas fa-video-slash"></i>
   `
     document.querySelector('.main__video_button').innerHTML = html;
+}
+
+document.getElementById("invite-button").addEventListener("click", getURL);
+
+function getURL() {
+  const c_url = window.location.href;
+  copyToClipboard(c_url);
+  alert("Url Copied to Clipboard,\nShare it with your Friends!\nUrl: " + c_url);
+}
+
+function copyToClipboard(text) {
+  var dummy = document.createElement("textarea");
+  document.body.appendChild(dummy);
+  dummy.value = text;
+  dummy.select();
+  document.execCommand("copy");
+  document.body.removeChild(dummy);
+}
+
+// End Call
+document.getElementById("end-button").addEventListener("click", endCall);
+
+function endCall() {
+  window.location.href = "https://clonemsteamschat.herokuapp.com/";
 }
