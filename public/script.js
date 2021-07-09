@@ -1,7 +1,10 @@
 const socket = io('/')
 const videoGrid = document.getElementById('video-grid')
+
+const user = prompt("Enter your name");
+
 const myPeer = new Peer(undefined, {
-    path: '/peerjs',
+    // path: '/peerjs',
     host: '/',
     port: '443'
 })
@@ -33,19 +36,26 @@ navigator.mediaDevices.getUserMedia({
             connectToNewUser(userId, stream)
         }, 1000)
     })
-// input value
-let text = $("input");
-// when press enter send message
-$('html').keydown(function (e) {
-    if (e.which == 13 && text.val().length !== 0) {
-        socket.emit('message', text.val());
-        text.val('')
-    }
-});
-socket.on("createMessage", message => {
-    $("ul").append(`<li class="message"><b>user</b><br/>${message}</li>`);
-    scrollToBottom()
-})
+    // input value
+    let text = $("input");
+    // when press enter send message
+    $('html').keydown(function (e) {
+        if (e.which == 13 && text.val().length !== 0) {
+            socket.emit('message', text.val());
+            text.val('')
+        }
+    });
+    socket.on("createMessage", (message, userName) => {
+        $("ul").append(`<li class="message">
+            <b>
+                <i class="far fa-user-circle"></i>
+                <span>${userName === user ? "me" : userName} </span> 
+            </b>
+            <br/>
+                ${message}
+        </li>`);
+        scrollToBottom()
+    })
 })
 
 socket.on('user-disconnected', userId => {
@@ -53,7 +63,7 @@ socket.on('user-disconnected', userId => {
 })
 
 myPeer.on('open', id => {
-    socket.emit('join-room', ROOM_ID, id)
+    socket.emit('join-room', ROOM_ID, id, user)
 })
 
 function connectToNewUser(userId, stream) {
@@ -136,23 +146,23 @@ const setPlayVideo = () => {
 document.getElementById("invite-button").addEventListener("click", getURL);
 
 function getURL() {
-  const c_url = window.location.href;
-  copyToClipboard(c_url);
-  alert("Url Copied to Clipboard,\nShare it with your Friends!\nUrl: " + c_url);
+    const c_url = window.location.href;
+    copyToClipboard(c_url);
+    alert("Url Copied to Clipboard,\nShare it with your Friends!\nUrl: " + c_url);
 }
 
 function copyToClipboard(text) {
-  var dummy = document.createElement("textarea");
-  document.body.appendChild(dummy);
-  dummy.value = text;
-  dummy.select();
-  document.execCommand("copy");
-  document.body.removeChild(dummy);
+    var dummy = document.createElement("textarea");
+    document.body.appendChild(dummy);
+    dummy.value = text;
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
 }
 
 // End Call
 document.getElementById("end-button").addEventListener("click", endCall);
 
 function endCall() {
-  window.location.href = "https://clonemsteamschat.herokuapp.com/";
+    window.location.href = "https://clonemsteamschat.herokuapp.com/";
 }

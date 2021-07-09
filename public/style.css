@@ -13,6 +13,19 @@
     flex: 0.2
 }
 
+#video-grid {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+video {
+    height: 300px;
+    width: 300px;
+    object-fit: cover;
+    padding: 8px;
+}
+
 .main__videos {
     flex-grow: 1;
     background-color: #1A1A1A;
