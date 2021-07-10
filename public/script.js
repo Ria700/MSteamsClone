@@ -6,7 +6,7 @@ const videoGrid = document.getElementById('video-grid')
 const user = prompt("Enter your name", "user");
 // create a peer: connection to peer server
 const myPeer = new Peer(undefined, { // peer server generates random user ids
-    // path: '/peerjs',
+    path: '/peerjs',
     host: '/', // root server
     port: '443'
 })
@@ -192,7 +192,7 @@ function leaveCall() {
     window.location.href = "https://clonemsteamschat.herokuapp.com/";
 }
 
-// Scroll functionality for chat window
+// Scroll functionality for chat
 const scrollToBottom = () => {
     var d = $('.main__chat_window');
     d.scrollTop(d.prop("scrollHeight"));
