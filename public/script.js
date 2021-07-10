@@ -76,7 +76,7 @@ navigator.mediaDevices.getUserMedia({
     })
 })
 
-// when the user disconnects
+// run when the user disconnects
 socket.on('user-disconnected', userId => {
     if (peers[userId]) peers[userId].close()
 })
@@ -86,7 +86,7 @@ myPeer.on('open', id => {
     socket.emit('join-room', ROOM_ID, id, user)
 })
 
-// function to use our video and stream
+// Function to use our video and stream
 function addVideoStream(video, stream) {
     video.srcObject = stream
     video.addEventListener('loadedmetadata', () => {
@@ -95,7 +95,7 @@ function addVideoStream(video, stream) {
     videoGrid.append(video) // append video on video-grid
 }
 
-// function that uses call() from peerjs
+// Function that uses call() from peerjs
 // also connects diffrent users streams with each other
 // removes waste videos
 function connectToNewUser(userId, stream) {
@@ -110,7 +110,7 @@ function connectToNewUser(userId, stream) {
     peers[userId] = call
 }
 
-// Funtion to mute & unmute
+// Function to mute & unmute
 const muteUnmute = () => {
     const enabled = myVidStream.getAudioTracks()[0].enabled;
     if (enabled) {
@@ -135,7 +135,7 @@ const playStop = () => {
     }
 }
 
-// Funtion to set the microphone button as mute
+// Function to set the microphone button as mute
 const setMuteButton = () => {
     const html = `
     <i class="fas fa-microphone"></i>
@@ -143,7 +143,7 @@ const setMuteButton = () => {
     document.querySelector('.main__mute_button').innerHTML = html;
 }
 
-// Funtion to set the microphone button as unmute
+// Function to set the microphone button as unmute
 const setUnmuteButton = () => {
     const html = `
     <i class="unmute fas fa-microphone-slash"></i>
@@ -151,7 +151,7 @@ const setUnmuteButton = () => {
     document.querySelector('.main__mute_button').innerHTML = html;
 }
 
-// Funtion to set the video button as play
+// Function to set the video button as play
 const setPlayVideo = () => {
     const html = `
   <i class="stop fas fa-video-slash"></i>
@@ -159,7 +159,7 @@ const setPlayVideo = () => {
     document.querySelector('.main__video_button').innerHTML = html;
 }
 
-// Funtion to set the video button as stop
+// Function to set the video button as stop
 const setStopVideo = () => {
     const html = `
     <i class="fas fa-video"></i>
