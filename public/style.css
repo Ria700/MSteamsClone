@@ -1,40 +1,22 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+/* Main starts here */
 .main {
     height: 100vh;
     display: flex;
 }
 
+/* Left column starts here */
 .main__left {
     flex: 0.8;
     display: flex;
     flex-direction: column;
 }
 
-.main__right {
-    flex: 0.2
-}
-
-#video-grid {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-video {
-    height: 300px;
-    width: 300px;
-    object-fit: cover;
-    padding: 8px;
-}
-
-.main__videos {
-    flex-grow: 1;
-    background-color: #1A1A1A;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
-}
-
+/* Controls start here */
 .main__controls {
     background-color: #1F1F1F;
     color: #D2D2D2;
@@ -43,9 +25,11 @@ video {
     padding: 5px;
 }
 
-.main__right {
-    background-color: #242324;
-    border-left: 1px solid #3D3D42;
+.leave_meeting {
+    color: #fff;
+    background-color: #9D2F42;
+    min-width: 90px !important;
+    margin: auto 5px;
 }
 
 .main__controls__block {
@@ -75,10 +59,44 @@ video {
     font-size: 20px;
     padding: 5px;
 }
+/* Controls end here */
 
+/* Video-grid starts here */
+.main__videos {
+    flex-grow: 1;
+    background-color: #1A1A1A;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+#video-grid {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+video {
+    height: 300px;
+    width: 300px;
+    object-fit: cover;
+    padding: 8px;
+    border-radius: 30px;
+    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+}
+/* Video-grid ends here */
+/* Left column ends here */
+
+/* Right column starts here */
 .main__right {
+    flex: 0.2;
     display: flex;
     flex-direction: column;
+    background-color: #242324;
+    border-left: 1px solid #3D3D42;
 }
 
 .main__header {
@@ -109,10 +127,5 @@ video {
     border: none;
     color: #F5F5F5;
 }
-
-.leave_meeting {
-    color: #fff;
-    background-color: #9D2F42;
-    min-width: 90px !important;
-    margin: auto 5px;
-}
+/* Right column ends here */
+/* Main ends here */

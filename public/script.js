@@ -1,27 +1,40 @@
+// reference to socket
 const socket = io('/')
+// reference to video-grid
 const videoGrid = document.getElementById('video-grid')
-
-const user = prompt("Enter your name");
-
-const myPeer = new Peer(undefined, {
-    path: '/peerjs',
-    host: '/',
+// to get username
+const user = prompt("Enter your name", "user");
+// create a peer: connection to peer server
+const myPeer = new Peer(undefined, { // peer server generates random user ids
+    // path: '/peerjs',
+    host: '/', // root server
     port: '443'
 })
+
+// stream
 let myVidStream;
+// reference to a video
 const myVid = document.createElement('video')
+// mute our own video
 myVid.muted = true;
+// used for removing disconnected users
 const peers = {}
+// connect video
 navigator.mediaDevices.getUserMedia({
     video: true,
     audio: true
-}).then(stream => { // Promise
+}).then(stream => { // Promise that passes a stream
     myVidStream = stream;
+    // function call to play video
     addVideoStream(myVid, stream)
 
     myPeer.on('call', call => {
+        // receive streams
         call.answer(stream)
+        // reference to a video
         const video = document.createElement('video')
+
+        // respond to other video streams
         call.on('stream', userVideoStream => { // To share stream on all user screens
             setTimeout(() => {
                 addVideoStream(video, userVideoStream)
@@ -29,16 +42,19 @@ navigator.mediaDevices.getUserMedia({
         })
     })
 
-    socket.on('user-connected', userId => { // event to connect to new user
+    // event to connect to new user
+    socket.on('user-connected', userId => { 
         // user is joining
         setTimeout(() => {
             // user joined
-            connectToNewUser(userId, stream)
+            connectToNewUser(userId, stream) // function to connect to stream
         }, 1000)
     })
-    // input value
+
+    // chat fuctionality
+     // input value
     let text = $("input");
-    // when press enter send message
+     // when press enter send message
     $('html').keydown(function (e) {
         if (e.which == 13 && text.val().length !== 0) {
             socket.emit('message', text.val())
@@ -46,6 +62,7 @@ navigator.mediaDevices.getUserMedia({
         }
     })
     socket.on("createMessage", (message, userName) => {
+        // functionality to append messages & add name before every message
         $("ul").append(`<li class="message">
             <b>
                 <i class="far fa-user-circle"></i>
@@ -53,56 +70,59 @@ navigator.mediaDevices.getUserMedia({
             </b>
             <br/>
                 ${message}
-        </li>`);
+        </li>`)
+        // fuction for scrolling the chat window
         scrollToBottom()
     })
 })
 
+// when the user disconnects
 socket.on('user-disconnected', userId => {
     if (peers[userId]) peers[userId].close()
 })
 
+// run when connected with peer server 
 myPeer.on('open', id => {
     socket.emit('join-room', ROOM_ID, id, user)
 })
 
-function connectToNewUser(userId, stream) {
-    const call = myPeer.call(userId, stream)
-    const video = document.createElement('video')
-    call.on('stream', userVideoStream => {
-        addVideoStream(video, userVideoStream)
-    })
-    call.on('close', () => {
-        video.remove()
-    })
-
-    peers[userId] = call
-}
-
+// function to use our video and stream
 function addVideoStream(video, stream) {
     video.srcObject = stream
     video.addEventListener('loadedmetadata', () => {
-        video.play()
+        video.play() // play video
     })
-    videoGrid.append(video)
+    videoGrid.append(video) // append video on video-grid
 }
 
-const scrollToBottom = () => {
-    var d = $('.main__chat_window');
-    d.scrollTop(d.prop("scrollHeight"));
+// function that uses call() from peerjs
+// also connects diffrent users streams with each other
+// removes waste videos
+function connectToNewUser(userId, stream) {
+    const call = myPeer.call(userId, stream) // call() from peerjs
+    const video = document.createElement('video') // get other user's video
+    call.on('stream', userVideoStream => { // pass our video
+        addVideoStream(video, userVideoStream)
+    })
+    call.on('close', () => { // to remove videos of user who disconnected
+        video.remove()
+    })
+    peers[userId] = call
 }
 
+// Funtion to mute & unmute
 const muteUnmute = () => {
     const enabled = myVidStream.getAudioTracks()[0].enabled;
     if (enabled) {
-        myVidStream.getAudioTracks()[0].enabled = false;
-        setUnmuteButton();
+        myVidStream.getAudioTracks()[0].enabled = false
+        setUnmuteButton() // Function call to change UI to Unmute
     } else {
-        setMuteButton();
-        myVidStream.getAudioTracks()[0].enabled = true;
+        setMuteButton() // Function call to change UI to Mute
+        myVidStream.getAudioTracks()[0].enabled = true
     }
 }
 
+// Function to play and stop video
 const playStop = () => {
     console.log('object')
     let enabled = myVidStream.getVideoTracks()[0].enabled;
@@ -115,6 +135,7 @@ const playStop = () => {
     }
 }
 
+// Funtion to set the microphone button as mute
 const setMuteButton = () => {
     const html = `
     <i class="fas fa-microphone"></i>
@@ -122,6 +143,7 @@ const setMuteButton = () => {
     document.querySelector('.main__mute_button').innerHTML = html;
 }
 
+// Funtion to set the microphone button as unmute
 const setUnmuteButton = () => {
     const html = `
     <i class="unmute fas fa-microphone-slash"></i>
@@ -129,13 +151,7 @@ const setUnmuteButton = () => {
     document.querySelector('.main__mute_button').innerHTML = html;
 }
 
-const setStopVideo = () => {
-    const html = `
-    <i class="fas fa-video"></i>
-  `
-    document.querySelector('.main__video_button').innerHTML = html;
-}
-
+// Funtion to set the video button as play
 const setPlayVideo = () => {
     const html = `
   <i class="stop fas fa-video-slash"></i>
@@ -143,9 +159,18 @@ const setPlayVideo = () => {
     document.querySelector('.main__video_button').innerHTML = html;
 }
 
+// Funtion to set the video button as stop
+const setStopVideo = () => {
+    const html = `
+    <i class="fas fa-video"></i>
+  `
+    document.querySelector('.main__video_button').innerHTML = html;
+}
+
+// Invite button functionality
 document.getElementById("invite-button").addEventListener("click", getURL);
 
-function getURL() {
+function getURL() { 
     const c_url = window.location.href;
     copyToClipboard(c_url);
     alert("Url Copied to Clipboard,\nShare it with your Friends!\nUrl: " + c_url);
@@ -160,9 +185,15 @@ function copyToClipboard(text) {
     document.body.removeChild(dummy);
 }
 
-// End Call
-document.getElementById("end-button").addEventListener("click", endCall);
+// Leave button functionality
+document.getElementById("leave-button").addEventListener("click", leaveCall);
 
-function endCall() {
+function leaveCall() {
     window.location.href = "https://clonemsteamschat.herokuapp.com/";
+}
+
+// Scroll functionality for chat window
+const scrollToBottom = () => {
+    var d = $('.main__chat_window');
+    d.scrollTop(d.prop("scrollHeight"));
 }
