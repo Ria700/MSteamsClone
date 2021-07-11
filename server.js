@@ -13,10 +13,8 @@ const peerServer = ExpressPeerServer(server, {
  // uuid- to generate random ids
 const { v4: uuidV4 } = require('uuid')
 
-
 // setup peer server
 app.use('/peerjs', peerServer)
-
 
 // setup express server
  // render views using ejs library
@@ -24,19 +22,16 @@ app.set('view engine', 'ejs')
  // setup static folder for JavaScript & CSS - public folder
 app.use(express.static('public'))
 
-
 // get route
 app.get('/', (req, res) => {
     // create a room and redirect the user to that room
     res.redirect(`/${uuidV4()}`)
 })
 
-
 // create rooms
 app.get('/:room', (req, res) => {
     res.render('room', { roomId: req.params.room })
 })
-
 
 // socket.io- runs everytime there is a connection on the web page
 io.on('connection', socket => {
@@ -58,7 +53,6 @@ io.on('connection', socket => {
         })
     })
 })
-
 
 // start up the server to view it
 const port = process.env.PORT || 3000
